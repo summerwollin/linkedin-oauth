@@ -42,7 +42,7 @@ app.get('/auth/linkedin/callback', passport.authenticate('linkedin', {
 passport.use(new LinkedInStrategy({
   clientID: process.env.LINKEDIN_CLIENT_ID,
   clientSecret: process.env.LINKEDIN_CLIENT_SECRET,
-  callbackURL: "http://localhost:3000/auth/linkedin/callback",
+  callbackURL: process.env.HOST + "/auth/linkedin/callback",
   scope: ['r_emailaddress', 'r_basicprofile'],
 }, function(accessToken, refreshToken, profile, done) {
   // asynchronous verification, for effect...
