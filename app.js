@@ -34,9 +34,7 @@ app.use(cookieSession({
   secret: process.env.LINKEDIN_CLIENT_SECRET
 }));
 
-app.get('/auth/linkedin',
-passport.authenticate('linkedin'),
-function(req, res){
+app.get('/auth/linkedin', passport.authenticate('linkedin'), function(req, res){
   // The request will be redirected to LinkedIn for authentication, so this
   // function will not be called.
 });
@@ -53,7 +51,7 @@ passport.use(new LinkedInStrategy({
   scope: ['r_emailaddress', 'r_basicprofile'],
   state: true
 }, function(accessToken, refreshToken, profile, done) {
-  done(null, {id: profile.id, displayName: profile.displayName})
+  done(null, {id: profile.id, displayName: profile.displayName, token: accessToken})
 }));
 
 
