@@ -30,6 +30,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(cookieSession({
+  name: 'user',
   secret: process.env.LINKEDIN_CLIENT_SECRET
 }));
 
