@@ -4,8 +4,8 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
 var cookieSession = require('cookie-session');
+var bodyParser = require('body-parser');
 
 var LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
 var passport = require('passport');
@@ -27,8 +27,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
-app.use(passport.session());
-
 app.use(cookieSession({
   name: 'user',
   secret: process.env.LINKEDIN_CLIENT_SECRET
@@ -56,20 +54,30 @@ passport.use(new LinkedInStrategy({
 
 
 passport.serializeUser(function(user, done) {
+  console.log('sU', user);
   done(null, user);
 });
 
 passport.deserializeUser(function(user, done) {
+  console.log('dU', user);
   done(null, user)
 });
 
 app.use(function (req, res, next) {
+  console.log('rU', req.session);
+  req.user = req.session.passport.user
   res.locals.user = req.session.passport.user
   next()
 })
 
 app.use('/', routes);
 app.use('/users', users);
+
+app.get('/logout', function(req, res){
+  req.session.passport.user = null;
+  req.logout();
+  res.redirect('/');
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
